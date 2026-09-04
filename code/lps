@@ -42,3 +42,79 @@ if __name__ == "__main__":
     print("\nindex : " + " ".join(f"{i:>2}" for i in range(len(pattern))))
     print("char  : " + " ".join(f"{c:>2}" for c in pattern))
     print("lps   : " + " ".join(f"{v:>2}" for v in result))
+
+
+
+
+
+
+
+
+def lps(s):
+    n = len(s)
+    dp = [[0] * n for _ in range(n)]
+
+    # Every single character is a palindrome of length 1
+    for i in range(n):
+        dp[i][i] = 1
+
+    # Build the table
+    for cl in range(2, n + 1):   # cl = current length
+        for i in range(n - cl + 1):
+            j = i + cl - 1
+            if s[i] == s[j] and cl == 2:
+                dp[i][j] = 2
+            elif s[i] == s[j]:
+                dp[i][j] = dp[i + 1][j - 1] + 2
+            else:
+                dp[i][j] = max(dp[i][j - 1], dp[i + 1][j])
+
+    return dp[0][n - 1]
+
+# Example usage
+seq = "bbabcbcab"
+print("Length of LPS:", lps(seq))
+
+
+
+
+def lps(s):
+    n = len(s)
+    dp = [[0]*n for _ in range(n)]
+
+    for i in range(n):
+        dp[i][i] = 1
+
+    for cl in range(2, n+1):
+        for i in range(n-cl+1):
+            j = i+cl-1
+            if s[i] == s[j] and cl == 2:
+                dp[i][j] = 2
+            elif s[i] == s[j]:
+                dp[i][j] = dp[i+1][j-1] + 2
+            else:
+                dp[i][j] = max(dp[i][j-1], dp[i+1][j])
+
+    return dp[0][n-1]
+
+
+
+
+from functools import lru_cache
+
+def lps_recursive(s):
+    n = len(s)
+
+    @lru_cache(None)
+    def solve(i, j):
+        if i > j:
+            return 0
+        if i == j:
+            return 1
+        if s[i] == s[j]:
+            return 2 + solve(i+1, j-1)
+        else:
+            return max(solve(i+1, j), solve(i, j-1))
+
+    return solve(0, n-1)
+
