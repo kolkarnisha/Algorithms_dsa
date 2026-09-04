@@ -1,0 +1,45 @@
+LPS (Longest Proper Prefix which is also Suffix) concept visual, plus a plain-English walkthrough and clean Python code.
+
+What problem is LPS solving?
+
+Imagine you're searching for a word inside a big book — like searching for "AABAA" inside a giant string of letters.
+The naive way is: try matching at position 0, fail, slide over by 1, try again, fail, slide by 1 again... This is slow.
+
+The LPS array is a shortcut.
+It's used in the KMP (Knuth-Morris-Pratt) pattern matching algorithm. 
+It answers one question for every position in your pattern (the word you're searching for):
+
+"If I fail to match here, how much of what I've already matched can I reuse, instead of starting over from scratch?"
+
+It's called "Longest Prefix that is also a Suffix" — for every point in the pattern, 
+it finds the longest chunk at the beginning of the pattern that also appears at the end of what you've matched so far.
+
+Look at index 8 (the second "B"): everything from the start up through that point is "AABAABAA".
+The last 3 letters "AAB" are identical to the first 3 letters of the whole pattern. So the LPS value there is 3 — meaning 
+"if matching fails right after this, don't start over, just resume as if you'd already matched 3 letters."
+
+How the array gets built (step by step)
+
+The algorithm walks through the pattern once, comparing it against itself, using two pointers:
+
+i — walks forward through the pattern
+len — tracks the length of the current matching prefix/suffix
+Repeat until the whole pattern is processed
+Continue steps 2–5 until i reaches the end of the pattern. The result is a complete array the same length as the pattern,
+where lps[k] tells you the longest proper prefix-that-is-also-a-suffix ending at index k.
+1
+2
+3
+4
+5
+6
+
+Now here's the Python code that implements exactly those steps:
+
+The key intuition to remember: the LPS array is basically a string comparing itself to itself.
+Whenever a mismatch happens during pattern matching (whether against another string, or against itself while building the array),
+instead of sliding back to the very beginning, you jump to lps[length - 1] — reusing the fact that part of what you already matched ,
+happens to also be a valid starting chunk.
+
+This is what makes KMP search run in linear time (O(n + m)) instead of the naive approach's worst case of O(n × m) —
+you never re-examine a character in the main text twice.
