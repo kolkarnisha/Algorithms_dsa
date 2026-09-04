@@ -43,3 +43,42 @@ happens to also be a valid starting chunk.
 
 This is what makes KMP search run in linear time (O(n + m)) instead of the naive approach's worst case of O(n × m) —
 you never re-examine a character in the main text twice.
+
+
+Pattern: "AABAACAABAA"
+
+index :  0   1   2   3   4   5   6   7   8   9  10
+char  :  A   A   B   A   A   C   A   A   B   A   A
+lps   :  0   1   0   1   2   0   1   2   3   4   5
+
+At index 8 (second "B"): the string so far is "AABAABAA".
+Its last 3 letters "AAB" match the first 3 letters of the
+pattern → lps[8] = 3
+
+
+
+Building the LPS array (two pointers: i, len)
+-----------------------------------------------
+1. lps[0] = 0. Start i = 1, len = 0.
+
+2. Compare pattern[i] with pattern[len].
+
+3. If they MATCH:
+     len += 1
+     lps[i] = len
+     i += 1
+
+4. If they DON'T match and len > 0:
+     len = lps[len - 1]     (fall back, don't reset to 0)
+     (i stays the same — retry the comparison)
+
+5. If they DON'T match and len == 0:
+     lps[i] = 0
+     i += 1
+
+6. Repeat steps 2–5 until i reaches the end of the pattern.
+
+
+
+
+
