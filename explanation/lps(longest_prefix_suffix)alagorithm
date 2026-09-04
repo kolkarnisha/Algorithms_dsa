@@ -1,0 +1,65 @@
+Step‑wise Explanation
+Define Problem  
+Find the length of the longest subsequence in a string that is a palindrome.
+
+Recurrence Relation
+
+If first and last characters match → L(i, j) = L(i+1, j-1) + 2
+
+Else → L(i, j) = max(L(i+1, j), L(i, j-1))
+
+Dynamic Programming Table
+
+Create dp[n][n] where n = len(string)
+
+Initialize diagonal as 1 (single characters are palindromes)
+
+Fill Table
+
+Iterate substring lengths from 2 to n
+
+Update dp[i][j] using recurrence relation
+
+Final Answer
+
+Result is stored at dp[0][n-1]
+
+Complexity
+
+Time: O(n^2)
+
+Space: O(n^2) (can be optimized to O(n))
+
+
+
+Step‑wise Explanation
+Define Recursive Function
+
+Base case: single character → length = 1
+
+If indices cross → length = 0
+
+Recurrence Relation
+
+If characters match → 2 + recurse(i+1, j-1)
+
+Else → max(recurse(i+1, j), recurse(i, j-1))
+
+Memoization
+
+Use a dictionary or lru_cache to store results of subproblems.
+
+Avoid recomputation → improves efficiency.
+
+Final Answer
+
+Call function with full string range (0, n-1).
+
+Complexity
+
+Time: O(n^2) with memoization
+
+Space: O(n^2) due to recursion + cache
+
+
+
